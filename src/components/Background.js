@@ -19,7 +19,7 @@ export default function Background({ children }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    marginBottom: 130,
+    marginBottom: 200,
     marginTop: 0,
 
     width: '100%',

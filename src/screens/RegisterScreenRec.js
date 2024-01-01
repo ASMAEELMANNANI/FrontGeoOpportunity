@@ -17,7 +17,8 @@ export default function RegisterScreen({ navigation }) {
   const [username, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   const [phone, setPhone] = useState({ value: '', error: '' })
-  const [CV, setCV] = useState({ value: '', error: '' })
+  const [adresse, setAdressse] = useState({ value: '', error: '' })
+  const [nom, setNom] = useState({ value: '', error: '' })
 
   const onSignUpPressed = async () => {
     const nameError = nameValidator(firstname.value);
@@ -25,7 +26,8 @@ export default function RegisterScreen({ navigation }) {
     const emailError = emailValidator(username.value);
     const passwordError = passwordValidator(password.value);
     const phoneError = nameValidator(phone.value);
-    const CVError = nameValidator(CV.value);
+    const AdresseError = nameValidator(adresse.value);
+    const NomError = nameValidator(nom.value);
   
     if (emailError || passwordError || nameError || lastNameError) {
       setName({ ...firstname, error: lastNameError });
@@ -41,21 +43,22 @@ export default function RegisterScreen({ navigation }) {
     console.log('Email:', username.value);
     console.log('Password:', password.value);
     console.log('Phone:', phone.value);
-    console.log('CV File:', CV.value);
+    console.log('Adresse:', adresse.value);
+    console.log('Nom:', nom.value);
   
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/createCandidate', {
+      const response = await fetch('http://192.168.11.103:8096/user/createRecruiter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `firstname=${encodeURIComponent(firstname.value)}&lastname=${encodeURIComponent(lastname.value)}&username=${encodeURIComponent(username.value)}&password=${encodeURIComponent(password.value)}&phone=${encodeURIComponent(phone.value)}&CV=${encodeURIComponent(CV.value)}`,
+        body: `firstname=${encodeURIComponent(firstname.value)}&lastname=${encodeURIComponent(lastname.value)}&username=${encodeURIComponent(username.value)}&password=${encodeURIComponent(password.value)}&phone=${encodeURIComponent(phone.value)}&adresse=${encodeURIComponent(adresse.value)}&nom=${encodeURIComponent(nom.value)}`,
       });
   
       if (response.status === 200) {
         // Candidate creation successful
         // You may want to handle the response from the server, if needed.
-        console.log('Candidate created successfully');
+        console.log('Recruiter created successfully');
         alert('Account created successfully');
         // Reset the form or perform other necessary actions.
         setName({ value: '', error: '' });
@@ -63,12 +66,13 @@ export default function RegisterScreen({ navigation }) {
         setEmail({ value: '', error: '' });
         setPassword({ value: '', error: '' });
         setPhone({ value: '', error: '' });
-        setCV({ value: '', error: '' });
+        setAdressse({ value: '', error: '' });
+        setNom({ value: '', error: '' });
       } else {
-        console.error('Email already exists');
+        console.error('Email  OR entreprise already exists');
       }
     } catch (error) {
-      console.error('Error during candidate creation:', error);
+      console.error('Error during Recruiter creation:', error);
       // Handle error accordingly, show error message, etc.
     }
   };
@@ -124,12 +128,20 @@ export default function RegisterScreen({ navigation }) {
         errorText={phone.error}
       />
       <TextInput
-        label="CV"
+        label="Adresse Of Entreprise"
         returnKeyType="next"
-        value={CV.value}
-        onChangeText={(text) => setCV({ value: text, error: '' })}
-        error={!!CV.error}
-        errorText={CV.error}
+        value={adresse.value}
+        onChangeText={(text) => setAdressse({ value: text, error: '' })}
+        error={!!adresse.error}
+        errorText={adresse.error}
+      />
+      <TextInput
+        label="Name Of Entreprise"
+        returnKeyType="next"
+        value={nom.value}
+        onChangeText={(text) => setNom({ value: text, error: '' })}
+        error={!!nom.error}
+        errorText={nom.error}
       />
       
       <Button1

@@ -13,7 +13,7 @@ export default function StartScreen({ navigation }) {
       </Paragraph1>
       <Button
         mode="contained"
-        onPress={() => navigation.navigate('SignScreen')}
+        onPress={() => navigation.navigate('CandidatOrRecruiter')}
       >
         {'Get started '}
       </Button>

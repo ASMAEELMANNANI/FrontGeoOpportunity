@@ -29,7 +29,7 @@ export default function LoginScreen({ navigation }) {
   console.log('Password:', password.value);
 
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/authenticateCand', {
+      const response = await fetch('http://192.168.11.103:8096/user/authenticateRec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

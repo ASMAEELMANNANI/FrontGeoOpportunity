@@ -4,3 +4,8 @@ export { default as LoginScreen } from './LoginScreen'
 export { default as RegisterScreen } from './RegisterScreen'
 export { default as ResetPasswordScreen } from './ResetPasswordScreen'
 export { default as Dashboard } from './Dashboard'
+export { default as CandidatOrRecruiter } from './CandidatOrRecruiter'
+export { default as SignScreenRec } from './SignScreenRec'
+export { default as LoginScreenRec } from './LoginScreenRec'
+export { default as RegisterScreenRec } from './RegisterScreenRec'
+
