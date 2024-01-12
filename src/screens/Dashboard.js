@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as Location from 'expo-location'
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import LoginScreen from '../screens/LoginScreen';
 
-export default function App() {
+const Drawer = createDrawerNavigator();
+
+export default function Dashboard() {
   const [location, setLocation] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [mapRegion, setMapRegion] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const route = useRoute();
+  const { candidateId } = route.params;
+  const navigation = useNavigation();
 
   useEffect(() => {
     ;(async () => {
@@ -24,7 +25,6 @@ export default function App() {
         setErrorMsg('Permission to access location was denied')
         return
       }
-      // eslint-disable-next-line no-shadow
       const location = await Location.getCurrentPositionAsync({})
       setLocation(location)
       setMapRegion({
@@ -44,43 +44,57 @@ export default function App() {
   }
 
   const search = () => {
-    // Ajoutez ici votre logique de recherche
-    alert('Vous avez recherché: ' + searchQuery)
+    // Add your search logic here
+    alert('You have searched: ' + searchQuery)
   }
 
+  const logout = () => {
+    // Perform any additional logout logic here
+    // For now, simply navigate to the LoginScreen
+    navigation.navigate('LoginScreen');
+  };
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search..."
-        value={searchQuery}
-        // eslint-disable-next-line no-shadow
-        onChangeText={(text) => setSearchQuery(text)}
-      />
-      <TouchableOpacity style={styles.searchButton} onPress={search}>
-        <Text style={styles.searchButtonText}>Search</Text>
-      </TouchableOpacity>
-      <MapView
-        style={[styles.map, styles.containerBackground]}
-        provider={PROVIDER_GOOGLE}
-        region={mapRegion}
-        showsUserLocation
-        followUserLocation
-      >
-        {location && (
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="You are here"
-            description="Your current location"
-          />
+    <Drawer.Navigator>
+      <Drawer.Screen name=" ">
+        {() => (
+          <View style={styles.container}>
+            <Text>Your ID is {candidateId} in this page Dashboard</Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search..."
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+            />
+            <TouchableOpacity style={styles.searchButton} onPress={search}>
+              <Text style={styles.searchButtonText}>Search</Text>
+            </TouchableOpacity>
+            <MapView
+              style={[styles.map, styles.containerBackground]}
+              provider={PROVIDER_GOOGLE}
+              region={mapRegion}
+              showsUserLocation
+              followUserLocation
+            >
+              {location && (
+                <Marker
+                  coordinate={{
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                  }}
+                  title="You are here"
+                  description="Your current location"
+                />
+              )}
+            </MapView>
+          </View>
         )}
-      </MapView>
-    </View>
+      </Drawer.Screen>
+      <Drawer.Screen name="LogOut" component={LoginScreen} listeners={{ focus: logout }} />
+    </Drawer.Navigator>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -115,4 +129,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-})
+});

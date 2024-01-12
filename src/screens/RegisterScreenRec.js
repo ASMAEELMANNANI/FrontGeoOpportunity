@@ -47,7 +47,7 @@ export default function RegisterScreen({ navigation }) {
     console.log('Nom:', nom.value);
   
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/createRecruiter', {
+      const response = await fetch('http://192.168.11.103:8222/user/createRecruiter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -154,7 +154,7 @@ export default function RegisterScreen({ navigation }) {
       <View style={styles.row}>
         <Text>Already have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-          <Text style={styles.link}>Login</Text>
+          <Text style={styles.link}>Register</Text>
         </TouchableOpacity>
       </View>
     </Background1>

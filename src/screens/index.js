@@ -8,4 +8,5 @@ export { default as CandidatOrRecruiter } from './CandidatOrRecruiter'
 export { default as SignScreenRec } from './SignScreenRec'
 export { default as LoginScreenRec } from './LoginScreenRec'
 export { default as RegisterScreenRec } from './RegisterScreenRec'
-
+export { default as AddOffer } from './AddOffer'
+export { default as FormOffre } from './FormOffre'

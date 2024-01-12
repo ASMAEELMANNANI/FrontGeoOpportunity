@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react'
 import { Provider } from 'react-native-paper'
 import { NavigationContainer } from '@react-navigation/native'
@@ -13,7 +14,9 @@ import {
   CandidatOrRecruiter,
   SignScreenRec,
   LoginScreenRec,
-  RegisterScreenRec
+  RegisterScreenRec,
+  AddOffer,
+  FormOffre
 
 } from './src/screens'
 
@@ -38,6 +41,8 @@ export default function App() {
           <Stack.Screen name="SignScreenRec" component={SignScreenRec} />
           <Stack.Screen name="LoginScreenRec" component={LoginScreenRec} />
           <Stack.Screen name="RegisterScreenRec" component={RegisterScreenRec} />
+          <Stack.Screen name="AddOffer" component={AddOffer} />
+          <Stack.Screen name="FormOffre" component={FormOffre} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

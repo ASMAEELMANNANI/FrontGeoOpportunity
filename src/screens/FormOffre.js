@@ -1,189 +1,213 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-paper'
-import Background1 from '../components/Background1'
-import Header1 from '../components/Header1'
-import Button1 from '../components/Button1'
-import TextInput from '../components/TextInput'
-import BackButton from '../components/BackButton'
-import { theme } from '../core/theme'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
-import { nameValidator } from '../helpers/nameValidator'
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { Text } from 'react-native-paper';
+import Background1 from '../components/Background1';
+import Header1 from '../components/Header1';
+import Button1 from '../components/Button1';
+import TextInput from '../components/TextInput';
+import BackButton from '../components/BackButton';
+import { theme } from '../core/theme';
+import { nameValidator } from '../helpers/nameValidator';
+import DatePicker from 'react-native-modern-datepicker';
+import RNPickerSelect  from 'react-native-picker-select';
 
-export default function FormOffre({ navigation }) {
-  const [contrat, setContrat] = useState({ value: '', error: '' })
-  const [libelle, setLibelle] = useState({ value: '', error: '' })
-  const [dateCreation, setDateCreation] = useState({ value: '', error: '' })
-  const [dateExpiration, setDateExpiration] = useState({ value: '', error: '' })
-  const [description, setDescription] = useState({ value: '', error: '' })
-  const [domaine, setDomaine] = useState({ value: '', error: '' })
- // const [entreprise, setEntreprise] = useState({ value: '', error: '' })
 
-  const ValidatePressed = async () => {
-    const contrat = nameValidator(firstname.value);
-    const libelle = nameValidator(lastname.value);
-    const dateCreation = emailValidator(username.value);
-    const dateExpiration = passwordValidator(password.value);
-    const description = nameValidator(phone.value);
-    const domaine = nameValidator(adresse.value);
-   // const entreprise = nameValidator(nom.value);
+export default function RegisterScreen({ navigation }) {
+  const [libelle, setLib] = useState({ value: '', error: '' });
+  const [dateCreation, setDateCreation] = useState();
+  const [datePickerVisible, setDatePickerVisible] = useState(null);
+
+  const [dateExpiration, setdateExpiration] = useState();
+  const [datePickerVisible1, setDatePickerVisible1] = useState(null);
+
+  const [description, setdescription] = useState({ value: '', error: '' });
+  const [domaine, setdomain] = useState({ value: '', error: '' });
+
+  const [contrat, setcontract] = useState({ label: '', value: '' });
+  const [ville, setVille] = useState({ label: '', value: '' });
+
   
-    if (domaine || description || dateExpiration || dateCreation || libelle || contrat) {
-      
+
+  const onSignUpPressed = async () => {
+    const LibError = nameValidator(libelle.value);
+    const dateCreationError = nameValidator(dateCreation);
+    const dateExpirationError = nameValidator(dateExpiration);
+    const DescriptionError = nameValidator(description.value);
+    const DomaineError = nameValidator(domaine.value);
+    const contractError = nameValidator(contrat.value);
+    const CityError = nameValidator(ville.value);
+
+    // Log the values before sending the request
+    console.log('Label :', libelle.value);
+    console.log('Date Start:', dateCreation );
+    console.log('Expiry date:', dateExpiration );
+
+    console.log('Description:', description.value);
+    console.log('Domain:', domaine.value);
+    console.log('contract:', contrat.value);
+
+    if (LibError || dateCreationError || dateExpirationError || DescriptionError || DomaineError || contractError) {
+      setLib({ ...libelle, error: LibError });
+      setdateExpiration({ ...libelle, error: dateCreationError });
+      setdescription({ ...description, error: dateExpirationError });
+      setdomain({ ...domaine, error: DomaineError });
+      setcontract({ ...contrat, error: contractError });
       return;
     }
-  
+
+    
+
     try {
-        const data = {
-            domaine: domaine.value,
-            description: description.value,
-            dateExpiration: dateExpiration.value,
-            dateCreation: dateCreation.value,
-            libelle: libelle.value,
-            contrat: contrat.value,
-          };
+      const response = await fetch('http://192.168.11.103:8222/offre/Add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+              "libelle": libelle.value,
+              "dateCreation": dateCreation,
+              "dateExpiration": dateExpiration,
+              "description": description.value,
+              "domaine": domaine.value,
+              "contrat": contrat.value,
+              "longitude": 0.0,
+              "latitude": 0.0,
+              "ville": ville.value,
+              "feedbacks": [],
+              "candidats": [],
+              "entreprise": {
+                "id": 1
+              }
+         
           
-          const response = await fetch('http://192.168.11.103:8096/offre', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json', // Change content type to JSON
-            },
-            body: JSON.stringify(data), // Convert data to JSON string
-          });
-  
+
+        }),
+      });
+
       if (response.status === 200) {
-        // Candidate creation successful
-        // You may want to handle the response from the server, if needed.
-        alert('Offre created successfully');
+      
+        console.log('Offer created successfully');
+        alert('Offer created successfully');
         // Reset the form or perform other necessary actions.
-        setDomaine({ value: '', error: '' });
-        setDescription({ value: '', error: '' });
-        setDateExpiration({ value: '', error: '' });
-        setDateCreation({ value: '', error: '' });
-        setLibelle({ value: '', error: '' });
-        setContrat({ value: '', error: '' });
+        setLib({ value: '', error: '' });
+        setdomain({ value: '', error: '' });
+        setDateCreation();
+        setdateExpiration();
+        setdescription({value: '', error: ''});
+        setcontract({value: '', error: ''});
+        setVille({value: '', error: ''});
+        
       } else {
-        console.error('ERREUR');
+        console.error('Try again');
       }
     } catch (error) {
-      console.error('Error  :', error);
-      // Handle error accordingly, show error message, etc.
+      console.error('Error during Offer creation:', error);
+      // Handle the error accordingly, show an error message, etc.
     }
   };
-    
-  
+
   return (
     <Background1>
       <BackButton goBack={navigation.goBack} />
-      <Header1>Create Opportunity</Header1>
+      <Header1>Add A New Offer </Header1>
       <TextInput
-        label="Libelle"
+        label="Label"
         returnKeyType="next"
         value={libelle.value}
-        onChangeText={(text) => setLibelle({ value: text, error: '' })}
+        onChangeText={(text) => setLib({ value: text, error: '' })}
         error={!!libelle.error}
         errorText={libelle.error}
       />
-       <TextInput
-        label="Contrat"
-        returnKeyType="next"
-        value={contrat.value}
-        onChangeText={(text) => setContrat({ value: text, error: '' })}
-        error={!!contrat.error}
-        errorText={contrat.error}
-      />
+
+      <TouchableWithoutFeedback onPress={() => setDatePickerVisible(true)}>
+        <View style={styles.datePickerContainer}>
+          <Text>{dateCreation ? dateCreation : 'Select Date Start'}</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
+      <Modal visible={datePickerVisible} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <DatePicker
+              mode="calendar" // or "spinner"
+              onDateChange={(date) => {
+                console.log('Selected Date:', date);
+                //setDateCreation(date);
+                setDateCreation(date.replace(/\//g, '-'));
+                setDatePickerVisible(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <TouchableWithoutFeedback onPress={() => setDatePickerVisible1(true)}>
+        <View style={styles.datePickerContainer}>
+          <Text>{dateExpiration ? dateExpiration : 'Select  expiry date'}</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
+      <Modal visible={datePickerVisible1} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <DatePicker
+              mode="calendar" // or "spinner"
+              onDateChange={(date) => {
+                console.log('Selected Date:', date);
+                //setdateExpiration(date);
+                setdateExpiration(date.replace(/\//g, '-'));
+                setDatePickerVisible1(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <TextInput
         label="Description"
         returnKeyType="next"
         value={description.value}
-        onChangeText={(text) => setDescription({ value: text, error: '' })}
+        onChangeText={(text) => setdescription({ value: text, error: '' })}
         error={!!description.error}
         errorText={description.error}
       />
+
       <TextInput
-        label="Domaine"
+        label="Domain"
         returnKeyType="next"
         value={domaine.value}
-        onChangeText={(text) => setDomaine({ value: text, error: '' })}
+        onChangeText={(text) => setdomain({ value: text, error: '' })}
         error={!!domaine.error}
         errorText={domaine.error}
-        secureTextEntry
-      />
-      <PaperTextInput
-        label="date Début"
-        returnKeyType="next"
-        value={dateCreation.value}
-        onChangeText={(text) => setDateCreation({ value: text, error: '' })}
-        error={!!dateCreation.error}
-        errorText={dateCreation.error}
       />
 
-      {/* Date Picker */}
-      <DatePicker
-        style={{ width: 200 }}
-        date={dateCreation.value}
-        mode="date"
-        placeholder="select date"
-        format="YYYY-MM-DD"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 0,
-            top: 4,
-            marginLeft: 0,
-          },
-          dateInput: {
-            marginLeft: 36,
-          },
-        }}
-        onDateChange={handleDateChange}
-      />
-      
-      <PaperTextInput
-        label="date Expiration"
+    <TextInput
+        label="Contract"
         returnKeyType="next"
-        value={dateExpiration.value}
-        onChangeText={(text) => setDateExpiration({ value: text, error: '' })}
-        error={!!dateExpiration.error}
-        errorText={dateExpiration.error}
+        value={contrat.value}
+        onChangeText={(text) => setcontract({ value: text, error: '' })}
+        error={!!contrat.error}
+        errorText={contrat.error}
       />
 
-      {/* Date Picker for Expiration Date */}
-      <DatePicker
-        style={{ width: 200 }}
-        date={dateExpiration.value}
-        mode="date"
-        placeholder="select date"
-        format="YYYY-MM-DD"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 0,
-            top: 4,
-            marginLeft: 0,
-          },
-          dateInput: {
-            marginLeft: 36,
-          },
-        }}
-        onDateChange={handleExpirationDateChange}
+      <TextInput
+        label="City"
+        returnKeyType="next"
+        value={ville.value}
+        onChangeText={(text) => setVille({ value: text, error: '' })}
+        error={!!ville.error}
+        errorText={ville.error}
       />
+
       
-      <Button1
-        mode="contained"
-        onPress={ValidatePressed}
-        style={{ marginTop: 24 }}
-      >
+
+
+      <Button1 mode="contained" onPress={onSignUpPressed} style={{ marginTop: 24 }}>
         Add
       </Button1>
-    
+      
     </Background1>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -195,4 +219,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
-})
+
+  datePickerContainer: {
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: theme.colors.primary, // You can set your desired border color
+    borderRadius: 5,
+    padding: 10,
+    width: '100%',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: 300, // set your desired width
+    height: 400, // set your desired height
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+ 
+});

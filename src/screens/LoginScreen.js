@@ -9,11 +9,14 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import { useNavigation } from '@react-navigation/native'
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
 
+  const [candidateId, setCandidateId] = useState(null);
+  
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -29,7 +32,7 @@ export default function LoginScreen({ navigation }) {
   console.log('Password:', password.value);
 
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/authenticateCand', {
+      const response = await fetch('http://192.168.11.103:8222/user/authenticateCand', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -39,10 +42,26 @@ export default function LoginScreen({ navigation }) {
 
       if (response.status === 200) {
         // Authentication successful
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Dashboard' }],
-        });
+       
+        try {
+          const data = JSON.parse(await response.text());
+          // Handle the parsed data
+          setCandidateId(data.id);
+          console.log("Candidate Id: ", data.id);
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Dashboard',
+                params: { candidateId: data.id },
+              },
+            ],
+          });
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+          console.log('Response Text:', await response.text());
+        }
+       
       } else {
         console.error('Your Email Or password incorrect please check out and try again');
       }
@@ -91,6 +110,12 @@ export default function LoginScreen({ navigation }) {
         <Text>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
           <Text style={styles.link}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+      <Text>Go Back ,  </Text>
+        <TouchableOpacity onPress={() => navigation.replace('CandidatOrRecruiter')}>
+          <Text style={styles.link}>Home Page</Text>
         </TouchableOpacity>
       </View>
     </Background1>

@@ -29,7 +29,7 @@ export default function LoginScreen({ navigation }) {
   console.log('Password:', password.value);
 
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/authenticateRec', {
+      const response = await fetch('http://192.168.11.103:8222/user/authenticateRec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
         // Authentication successful
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Dashboard' }],
+          routes: [{ name: 'AddOffer' }],
         });
       } else {
         console.error('Your Email Or password incorrect please check out and try again');
@@ -91,6 +91,12 @@ export default function LoginScreen({ navigation }) {
         <Text>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
           <Text style={styles.link}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+      <Text>Go Back ,  </Text>
+        <TouchableOpacity onPress={() => navigation.replace('CandidatOrRecruiter')}>
+          <Text style={styles.link}>Home Page</Text>
         </TouchableOpacity>
       </View>
     </Background1>

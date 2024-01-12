@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState , useCallback,useEffect} from 'react'
+import { View, StyleSheet, TouchableOpacity , SafeAreaView,Button} from 'react-native'
 import { Text } from 'react-native-paper'
 import Background1 from '../components/Background1'
 import Header1 from '../components/Header1'
@@ -10,6 +10,9 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
+import * as DocumentPicker from 'expo-document-picker';
+
+
 
 export default function RegisterScreen({ navigation }) {
   const [firstname, setName] = useState({ value: '', error: '' })
@@ -19,38 +22,103 @@ export default function RegisterScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: '', error: '' })
   const [CV, setCV] = useState({ value: '', error: '' })
 
+ 
+
+  // File
+  const [fileUri, setFileUri] = useState(null);
+ 
+  // Pick A file
+  // Pick A file
+  const handleDocumentSelection = useCallback(async () => {
+    
+    try {
+      const result = await DocumentPicker.getDocumentAsync();
+      console.log('Document Picker Result:', result);
+
+
+      setFileUri(result.assets[0].uri);
+      console.log('File URI:', result.assets[0].uri);
+     // console.log('File URI from Variable :', fileUri);
+
+      
+    } catch (err) {
+      console.warn('Error picking document:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    // This code will run after every render when fileUri changes
+    console.log('File URI from Variable:', fileUri);
+    
+    // Check if fileUri is not null before attempting to split
+    if (fileUri) {
+      // Split the fileUri based on the '/' character
+      const parts = fileUri.split('/');
+      // Extract the last part of the array, which contains the desired string
+      const fileName = parts[parts.length - 1];
+  
+      setCV(prevCV => ({ ...prevCV, value: fileName, error: '' }));
+
+      console.log('File Name:', fileName);
+    
+      // Log the updated CV value inside the useEffect
+     
+    }
+  }, [fileUri]);
+  
+ 
+
+ // console.log('Cv Value outside useEffect:', CV.value);
   const onSignUpPressed = async () => {
+    
     const nameError = nameValidator(firstname.value);
     const lastNameError = nameValidator(lastname.value);
     const emailError = emailValidator(username.value);
     const passwordError = passwordValidator(password.value);
     const phoneError = nameValidator(phone.value);
     const CVError = nameValidator(CV.value);
-  
+
     if (emailError || passwordError || nameError || lastNameError) {
       setName({ ...firstname, error: lastNameError });
       setLastName({ ...lastname, error: nameError });
       setEmail({ ...username, error: emailError });
       setPassword({ ...password, error: passwordError });
+      //setCV({...CV ,error:CvError})
       return;
     }
   
-    // Log the values before sending the request
-    console.log('First Name:', firstname.value);
-    console.log('Last Name:', lastname.value);
-    console.log('Email:', username.value);
-    console.log('Password:', password.value);
-    console.log('Phone:', phone.value);
-    console.log('CV File:', CV.value);
+   
+    
   
     try {
-      const response = await fetch('http://192.168.11.103:8096/user/createCandidate', {
+       // Log the values before sending the request
+      console.log('First Name:', firstname.value);
+      console.log('Last Name:', lastname.value);
+      console.log('Email:', username.value);
+      console.log('Password:', password.value);
+      console.log('Phone:', phone.value);
+      console.log('CV File:', CV.value);
+
+      const response = await fetch('http://192.168.11.103:8222/user/createCandidate', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: `firstname=${encodeURIComponent(firstname.value)}&lastname=${encodeURIComponent(lastname.value)}&username=${encodeURIComponent(username.value)}&password=${encodeURIComponent(password.value)}&phone=${encodeURIComponent(phone.value)}&CV=${encodeURIComponent(CV.value)}`,
+        body: JSON.stringify({
+        "firstname": firstname.value,
+        "lastname": lastname.value,
+        "username": username.value,
+        "password": password.value,
+        "phone": phone.value,
+        "cv": CV.value,
+        "feedbacks": [],
+        "offres": []
+     
+      
+
+       }),
       });
+
   
       if (response.status === 200) {
         // Candidate creation successful
@@ -63,7 +131,7 @@ export default function RegisterScreen({ navigation }) {
         setEmail({ value: '', error: '' });
         setPassword({ value: '', error: '' });
         setPhone({ value: '', error: '' });
-        setCV({ value: '', error: '' });
+        
       } else {
         console.error('Email already exists');
       }
@@ -73,6 +141,8 @@ export default function RegisterScreen({ navigation }) {
     }
   };
     
+
+ 
   
   return (
     <Background1>
@@ -123,14 +193,17 @@ export default function RegisterScreen({ navigation }) {
         error={!!phone.error}
         errorText={phone.error}
       />
-      <TextInput
-        label="CV"
-        returnKeyType="next"
-        value={CV.value}
-        onChangeText={(text) => setCV({ value: text, error: '' })}
-        error={!!CV.error}
-        errorText={CV.error}
-      />
+      
+
+      <SafeAreaView style={styles.container1}>
+        {fileUri && (
+          <Text style={styles.uri} numberOfLines={1} ellipsizeMode={'middle'}>
+            {fileUri}
+          </Text>
+        )}
+        <Button title="Select Your Resume 📑" onPress={handleDocumentSelection} />
+      </SafeAreaView>
+      
       
       <Button1
         mode="contained"
@@ -142,7 +215,7 @@ export default function RegisterScreen({ navigation }) {
       <View style={styles.row}>
         <Text>Already have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-          <Text style={styles.link}>Login</Text>
+          <Text style={styles.link}>Register</Text>
         </TouchableOpacity>
       </View>
     </Background1>
@@ -157,5 +230,17 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: 'bold',
     color: theme.colors.primary,
+  },
+
+  container1: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  uri: {
+    fontSize: 16,
+    marginTop: 10,
   },
 })
