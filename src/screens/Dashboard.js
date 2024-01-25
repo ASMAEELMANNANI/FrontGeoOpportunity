@@ -6,6 +6,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import LoginScreen from '../screens/LoginScreen';
 
+
 const Drawer = createDrawerNavigator();
 
 export default function Dashboard() {
@@ -91,6 +92,7 @@ export default function Dashboard() {
         )}
       </Drawer.Screen>
       <Drawer.Screen name="LogOut" component={LoginScreen} listeners={{ focus: logout }} />
+     
     </Drawer.Navigator>
   )
 }

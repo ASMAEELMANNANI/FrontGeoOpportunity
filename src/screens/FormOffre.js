@@ -10,9 +10,11 @@ import { theme } from '../core/theme';
 import { nameValidator } from '../helpers/nameValidator';
 import DatePicker from 'react-native-modern-datepicker';
 import RNPickerSelect  from 'react-native-picker-select';
+import { useRoute } from '@react-navigation/native';
 
+export default function RegisterScreen({ route, navigation }) {
 
-export default function RegisterScreen({ navigation }) {
+  const { recID } = route.params;
   const [libelle, setLib] = useState({ value: '', error: '' });
   const [dateCreation, setDateCreation] = useState();
   const [datePickerVisible, setDatePickerVisible] = useState(null);
@@ -58,7 +60,7 @@ export default function RegisterScreen({ navigation }) {
     
 
     try {
-      const response = await fetch('http://192.168.11.103:8222/offre/Add', {
+      const response = await fetch('http://192.168.11.106:8222/offre/Add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ export default function RegisterScreen({ navigation }) {
               "feedbacks": [],
               "candidats": [],
               "entreprise": {
-                "id": 1
+                "id": recID
               }
          
           

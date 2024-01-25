@@ -16,7 +16,9 @@ import {
   LoginScreenRec,
   RegisterScreenRec,
   AddOffer,
-  FormOffre
+  FormOffre,
+  OffersRecruiter,
+  CandidatsOfferRec
 
 } from './src/screens'
 
@@ -43,6 +45,8 @@ export default function App() {
           <Stack.Screen name="RegisterScreenRec" component={RegisterScreenRec} />
           <Stack.Screen name="AddOffer" component={AddOffer} />
           <Stack.Screen name="FormOffre" component={FormOffre} />
+          <Stack.Screen name="OffersRecruiter" component={OffersRecruiter} />
+          <Stack.Screen name="CandidatsOfferRec" component={CandidatsOfferRec} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

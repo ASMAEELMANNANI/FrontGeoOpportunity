@@ -47,7 +47,7 @@ export default function RegisterScreen({ navigation }) {
     console.log('Nom:', nom.value);
   
     try {
-      const response = await fetch('http://192.168.11.103:8222/user/createRecruiter', {
+      const response = await fetch('http://192.168.11.106:8222/user/createRecruiter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

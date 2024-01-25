@@ -14,6 +14,8 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
 
+  const [recID, setRecId] = useState(null);
+
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -29,7 +31,7 @@ export default function LoginScreen({ navigation }) {
   console.log('Password:', password.value);
 
     try {
-      const response = await fetch('http://192.168.11.103:8222/user/authenticateRec', {
+      const response = await fetch('http://192.168.11.106:8222/user/authenticateRec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -38,11 +40,24 @@ export default function LoginScreen({ navigation }) {
       });
 
       if (response.status === 200) {
-        // Authentication successful
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AddOffer' }],
-        });
+        try {
+          const data = JSON.parse(await response.text());
+          // Handle the parsed data
+          setRecId(data.id);
+          console.log("Recruiter Id: ", data.id);
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'AddOffer',
+                params: { recID: data.id },
+              },
+            ],
+          });
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+          console.log('Response Text:', await response.text());
+        }
       } else {
         console.error('Your Email Or password incorrect please check out and try again');
       }
