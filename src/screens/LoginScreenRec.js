@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
   console.log('Password:', password.value);
 
     try {
-      const response = await fetch('http://192.168.11.106:8222/user/authenticateRec', {
+      const response = await fetch('http://192.168.11.105:8222/user/authenticateRec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

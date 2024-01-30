@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback ,Alert,Image,ScrollView} from 'react-native';
 import { Text } from 'react-native-paper';
 import Background1 from '../components/Background1';
 import Header1 from '../components/Header1';
@@ -11,6 +11,8 @@ import { nameValidator } from '../helpers/nameValidator';
 import DatePicker from 'react-native-modern-datepicker';
 import RNPickerSelect  from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/native';
+import Search from  '../components/search';
+
 
 export default function RegisterScreen({ route, navigation }) {
 
@@ -28,9 +30,27 @@ export default function RegisterScreen({ route, navigation }) {
   const [contrat, setcontract] = useState({ label: '', value: '' });
   const [ville, setVille] = useState({ label: '', value: '' });
 
+ 
+  /**
+   * 
+   * @returns Autocomplete Place
+   */
   
+   // Use state to manage the location input value
+   const [location, setLocation] = useState({ value: '', error: '' });
+
+   const [selectedLocation, setSelectedLocation] = useState({ latitude: 0.0, longitude: 0.0 });
+
+   const onLocationSelect = (location) => {
+     setSelectedLocation(location);
+   };
 
   const onSignUpPressed = async () => {
+
+     // Log the selected location before sending the request
+     console.log('Selected Location:', selectedLocation);
+
+
     const LibError = nameValidator(libelle.value);
     const dateCreationError = nameValidator(dateCreation);
     const dateExpirationError = nameValidator(dateExpiration);
@@ -60,7 +80,7 @@ export default function RegisterScreen({ route, navigation }) {
     
 
     try {
-      const response = await fetch('http://192.168.11.106:8222/offre/Add', {
+      const response = await fetch('http://192.168.11.105:8222/offre/Add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,8 +92,8 @@ export default function RegisterScreen({ route, navigation }) {
               "description": description.value,
               "domaine": domaine.value,
               "contrat": contrat.value,
-              "longitude": 0.0,
-              "latitude": 0.0,
+              "longitude": selectedLocation.longitude,
+              "latitude": selectedLocation.latitude,
               "ville": ville.value,
               "feedbacks": [],
               "candidats": [],
@@ -108,10 +128,14 @@ export default function RegisterScreen({ route, navigation }) {
     }
   };
 
+ 
+  
   return (
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
     <Background1>
       <BackButton goBack={navigation.goBack} />
       <Header1>Add A New Offer </Header1>
+      
       <TextInput
         label="Label"
         returnKeyType="next"
@@ -201,6 +225,15 @@ export default function RegisterScreen({ route, navigation }) {
         errorText={ville.error}
       />
 
+      <Search 
+        id="location" // Provide a unique ID for the search component
+        placeholder="Location"
+        onClearInput={() => setLocation({ value: '', error: '' })}
+        accessToken="pk.eyJ1IjoibWVyaWVtZWwiLCJhIjoiY2xwMzhqanNuMHlwajJqcnBkOXdhajMwNCJ9.Dpk2oasn1cyqgHiyREyJlA" // Replace with your Mapbox access token
+        onChangeText={(text) => setLocation({ value: text, error: '' })}
+        onLocationSelect={onLocationSelect}
+      />
+
       
 
 
@@ -209,10 +242,14 @@ export default function RegisterScreen({ route, navigation }) {
       </Button1>
       
     </Background1>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flexGrow: 1,
+  },
   row: {
     flexDirection: 'row',
     marginTop: 4,
@@ -243,5 +280,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
   },
- 
+  
 });

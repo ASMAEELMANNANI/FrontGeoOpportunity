@@ -12,7 +12,7 @@ const CandidatsOfferRec = () => {
   useEffect(() => {
     const fetchOffer = async () => {
       try {
-        const response = await fetch(`http://192.168.11.106:8222/offre/${offerId}`);
+        const response = await fetch(`http://192.168.11.105:8222/offre/${offerId}`);
         const data = await response.json();
         setOffer(data);
       } catch (error) {

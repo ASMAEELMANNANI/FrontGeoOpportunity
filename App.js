@@ -18,7 +18,8 @@ import {
   AddOffer,
   FormOffre,
   OffersRecruiter,
-  CandidatsOfferRec
+  CandidatsOfferRec,
+  detailsScreen
 
 } from './src/screens'
 
@@ -47,6 +48,7 @@ export default function App() {
           <Stack.Screen name="FormOffre" component={FormOffre} />
           <Stack.Screen name="OffersRecruiter" component={OffersRecruiter} />
           <Stack.Screen name="CandidatsOfferRec" component={CandidatsOfferRec} />
+          <Stack.Screen name="detailsScreen" component={detailsScreen} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}
