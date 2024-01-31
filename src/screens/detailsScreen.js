@@ -2,6 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity,ScrollView,Alert} from 'react-native';
 import logoImage from '../assets/offerLogo.jpg';
 import { useRoute } from '@react-navigation/native';
+import FeedBackCard from '../screens/FeedBackCard'
 
 const DetailsScreen = ({ navigation }) => {
   const route = useRoute();
@@ -61,6 +62,10 @@ const DetailsScreen = ({ navigation }) => {
     return formattedDate;
   };
 
+  /***Navigate to the feedbacks Card */
+  const viewFeedbacks = () => {
+      navigation.navigate('FeedBackCard', {EntrepriseId: offerData.entreprise.id});
+  };
 
   return (
    
@@ -93,8 +98,8 @@ const DetailsScreen = ({ navigation }) => {
       </View>
      
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => navigation.navigate('mapScreen')}>
-          <Text style={styles.backButton}>{'< Go Back'}</Text>
+        <TouchableOpacity style={styles.button1} onPress={viewFeedbacks}>
+          <Text style={styles.buttonText}>View Feedbacks</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={applyToJob}>
           <Text style={styles.buttonText}>Apply</Text>
@@ -185,9 +190,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  backButton: {
-    fontSize: 18,
-    color: '#3498db',
+  button1: {
+    backgroundColor: '#808080',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+   
   },
 });
 

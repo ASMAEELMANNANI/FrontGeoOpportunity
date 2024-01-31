@@ -9,7 +9,6 @@ import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
 import { nameValidator } from '../helpers/nameValidator';
 import DatePicker from 'react-native-modern-datepicker';
-import RNPickerSelect  from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/native';
 import Search from  '../components/search';
 

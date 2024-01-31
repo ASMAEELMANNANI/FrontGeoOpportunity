@@ -8,7 +8,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import LoginScreenRec from '../screens/LoginScreenRec';
 import OffersRecruiter from '../screens/OffersRecruiter';
 
-
 const Drawer = createDrawerNavigator();
 
 const NewOffer = () => {
@@ -44,6 +43,7 @@ const NewOffer = () => {
       <Drawer.Screen name="My Offers">
         {() => <OffersRecruiter recID={recID} />}
       </Drawer.Screen>
+      
     </Drawer.Navigator>
   );
 };

@@ -5,6 +5,8 @@ import * as Location from 'expo-location';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import LoginScreen from '../screens/LoginScreen';
+import FeedbackScreen from '../screens/FeedbackScreen';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -223,6 +225,7 @@ export default function Dashboard() {
         )}
       </Drawer.Screen>
       <Drawer.Screen name="LogOut" component={LoginScreen} listeners={{ focus: logout }} />
+      <Drawer.Screen name="Add Feed Back" component={FeedbackScreen}  initialParams={{ candidateId: candidateId }}/>
     </Drawer.Navigator>
   );
 }
