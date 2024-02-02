@@ -83,10 +83,11 @@ const search = ({
     });
 
     // Display an alert with the coordinates of the suggestion
-    Alert.alert(
+   /* Alert.alert(
       "Destination Sélectionnée",
       `Latitude: ${suggestion.center[1]}, Longitude: ${suggestion.center[0]}`
-    );
+    );*/
+    console.log("Destination selecetionne Latitude / Longitude ",suggestion.center[1],suggestion.center[0]);
   };
 
   return (

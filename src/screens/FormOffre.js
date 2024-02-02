@@ -11,6 +11,7 @@ import { nameValidator } from '../helpers/nameValidator';
 import DatePicker from 'react-native-modern-datepicker';
 import { useRoute } from '@react-navigation/native';
 import Search from  '../components/search';
+import { Picker } from '@react-native-picker/picker';
 
 
 export default function RegisterScreen({ route, navigation }) {
@@ -197,33 +198,53 @@ export default function RegisterScreen({ route, navigation }) {
         errorText={description.error}
       />
 
-      <TextInput
-        label="Domain"
-        returnKeyType="next"
-        value={domaine.value}
-        onChangeText={(text) => setdomain({ value: text, error: '' })}
-        error={!!domaine.error}
-        errorText={domaine.error}
-      />
+<View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={domaine.value}
+          onValueChange={(itemValue, itemIndex) => setdomain({ value: itemValue, error: '' })}
+        >
+          <Picker.Item label="Select domain" value="" />
+          <Picker.Item label="Software" value="Software" />
+          <Picker.Item label="Data Science" value="Data Science" />
+          <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+          <Picker.Item label="Marketing" value="Marketing" />
+          <Picker.Item label="HR" value="HR" />
+           <Picker.Item label="Finance" value="Finance" />
+        </Picker>
+      </View>
 
-    <TextInput
-        label="Contract"
-        returnKeyType="next"
-        value={contrat.value}
-        onChangeText={(text) => setcontract({ value: text, error: '' })}
-        error={!!contrat.error}
-        errorText={contrat.error}
-      />
+    
 
-      <TextInput
-        label="City"
-        returnKeyType="next"
-        value={ville.value}
-        onChangeText={(text) => setVille({ value: text, error: '' })}
-        error={!!ville.error}
-        errorText={ville.error}
-      />
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={contrat.value}
+          onValueChange={(itemValue, itemIndex) => setcontract({ value: itemValue, error: '' })}
+        >
+          <Picker.Item label="Select Contract" value="" />
+          <Picker.Item label="Intership" value="Intership" />
+          <Picker.Item label="CDD" value="CDD" />
+          <Picker.Item label="CDI" value="CDI" />
+        </Picker>
+      </View>
 
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={ville.value}
+          onValueChange={(itemValue, itemIndex) => setVille({ value: itemValue, error: '' })}
+        >
+          <Picker.Item label="Select City" value="" />
+          <Picker.Item label="Casablanca" value="Casablanca" />
+          <Picker.Item label="Rabat" value="Rabat" />
+          <Picker.Item label="Mohammedia" value="Mohammedia" />
+          <Picker.Item label="Tanger" value="Tanger" />
+          <Picker.Item label="Marrakech" value="Marrakech" />
+          <Picker.Item label="Agadir" value="Agadir" />
+          <Picker.Item label="Sale" value="Sale" />
+          <Picker.Item label="Kenitra" value="Kenitra" />
+        </Picker>
+      </View>
+
+     
       <Search 
         id="location" // Provide a unique ID for the search component
         placeholder="Location"
@@ -278,6 +299,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5,
+  },
+  pickerContainer: {
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+    borderRadius: 5,
+    width: '100%',
   },
   
 });

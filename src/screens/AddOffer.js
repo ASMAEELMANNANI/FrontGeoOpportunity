@@ -31,7 +31,7 @@ const NewOffer = () => {
       <Drawer.Screen name=" ">
         {() => (
           <Background2>
-            <Header>Welcome your Id is {recID} </Header>
+            <Header>Welcome</Header>
             <Paragraph1>To Add A new Offer Click this button</Paragraph1>
             <Button mode="contained" onPress={() => navigation.navigate('FormOffre', { recID })}>
               {'Add A New Offer '}
