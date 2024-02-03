@@ -14,7 +14,7 @@ const DetailsScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchOfferData = async () => {
       try {
-        const response = await fetch(`http://192.168.11.105:8222/offre/${OfferId}`);
+        const response = await fetch(`http://192.168.11.103:8222/offre/${OfferId}`);
         const data = await response.json();
         setOfferData(data);
       } catch (error) {
@@ -27,7 +27,7 @@ const DetailsScreen = ({ navigation }) => {
 
   const applyToJob = async () => {
     try {
-      const response = await fetch(`http://192.168.11.105:8222/offre/${OfferId}/postuler/${CandId}`, {
+      const response = await fetch(`http://192.168.11.103:8222/offre/${OfferId}/postuler/${CandId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,8 +90,6 @@ const DetailsScreen = ({ navigation }) => {
           <Text style={styles.value}>{formatDate(offerData.dateCreation)} To {formatDate(offerData.dateExpiration)}</Text>
           <Text style={styles.label}>Entreprise:</Text>
           <Text style={styles.value}>{offerData.entreprise.nom}</Text>
-          <Text style={styles.label}>Adress:</Text>
-          <Text style={styles.value}>{offerData.entreprise.adresse}</Text>
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>{offerData.entreprise.email}</Text>
         </View>

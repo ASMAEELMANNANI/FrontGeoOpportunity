@@ -12,7 +12,7 @@ const FeedBackCard = ({ route }) => {
   useEffect(() => {
     const fetchEnterpriseData = async () => {
       try {
-        const response = await fetch(`http://192.168.11.105:8222/entreprise/${EntrepriseId}`);
+        const response = await fetch(`http://192.168.11.103:8222/entreprise/${EntrepriseId}`);
         const data = await response.json();
         //console.log('Enterprise Data:', data); // Log the entire data object
         setEnterpriseDetails(data);

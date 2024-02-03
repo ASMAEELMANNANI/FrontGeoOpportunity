@@ -10,7 +10,7 @@ const OffersRecruiter = ({ recID }) => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await fetch(`http://192.168.11.105:8222/offre/CandidaturesENTPS/${recID}`);
+        const response = await fetch(`http://192.168.11.103:8222/offre/CandidaturesENTPS/${recID}`);
         const data = await response.json();
         setOffers(data);
       } catch (error) {

@@ -118,7 +118,7 @@ export default function Dashboard() {
             offre.longitude
           );
   
-          return distance <= 10; // Adjust the distance threshold as needed
+          return distance <= 30; // Adjust the distance threshold as needed
         });
   
         setOtherMarkers(
@@ -179,6 +179,21 @@ export default function Dashboard() {
   
       const response = await fetch(url);
       const data = await response.json();
+
+      const nearbyOffers = data.filter((offre) => {
+        if (!location || !location.coords) {
+          return false; // Handle null or undefined location
+        }
+  
+        const distance = calculateDistance(
+          location.coords.latitude,
+          location.coords.longitude,
+          offre.latitude,
+          offre.longitude
+        );
+  
+        return distance <= 400; // Adjust the distance threshold as needed
+      });
   
       // Update map markers based on the response
       const updatedMarkers = data.map((offre) => ({
@@ -206,130 +221,145 @@ export default function Dashboard() {
   const data = ['Option 1', 'Option 2', 'Option 3'];
 
   return (
+   
+
     <Drawer.Navigator>
-      <Drawer.Screen name=" ">
-        {() => (
-          <View style={styles.container}>
-           <View style={styles.header}>
-              <Text style={styles.headerText}>Geo Opportunity</Text>
-              <TouchableOpacity onPress={openModal} style={styles.searchIcon}>
-              <FontAwesome5 style={{marginLeft: 19}} name="search" size={20} color="black" />
-              </TouchableOpacity>
-              <Modal
-                transparent
-                animationType="slide"
-                visible={modalVisible}
-                onRequestClose={closeModal}
-              >
-                <View style={styles.modalContainer}>
-                <Picker
-                        style={styles.picker}
-                        selectedValue={selectedCity}
-                        onValueChange={(itemValue) => setSelectedCity(itemValue)}
-                      >
-                      
-                    <Picker.Item label="City" value="all" />
-                        <Picker.Item label="Casablanca" value="Casablanca" />
-                        <Picker.Item label="Rabat" value="Rabat" />
-                        <Picker.Item label="Mohammedia" value="Mohammedia" />
-                        <Picker.Item label="Tanger" value="Tanger" />
-                        <Picker.Item label="Marrakech" value="Marrakech" />
-                        <Picker.Item label="Agadir" value="Agadir" />
-                        <Picker.Item label="Sale" value="Sale" />
-                        <Picker.Item label="Kenitra" value="Kenitra" />
-                  </Picker>
-                  <Picker
-                        style={styles.picker}
-                        selectedValue={selectedOfferType}
-                        onValueChange={(itemValue) => setSelectedOfferType(itemValue)}
-                      >
-                      <Picker.Item label="Domain" value="all" />
-                        <Picker.Item label="Software" value="Software" />
-                        <Picker.Item label="Data Science" value="Data Science" />
-                        <Picker.Item label="Cloud Computing" value="Cloud Computing" />
-                        <Picker.Item label="Marketing" value="Marketing" />
-                        <Picker.Item label="HR" value="HR" />
-                        <Picker.Item label="Finance" value="Finance" />
-                  </Picker>
-                  <Picker
-                      style={styles.picker}
-                      selectedValue={selectedOfferContract}
-                      onValueChange={(itemValue) => setSelectedOfferContract(itemValue)}
-                    >
-                  <Picker.Item label="Contract" value="all" />
-                      <Picker.Item label="Internship" value="Internship" />
-                      <Picker.Item label="CDD" value="CDD" />
-                      <Picker.Item label="CDI" value="CDI" />
-                  </Picker>
-          
-                  <View style={styles.buttonContainer}>
-                  
-                    <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
-                      <Text style={styles.buttonText}>Annuler </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.searchButton}
-                      onPress={() => {
-                        search();
-                        closeModal();
-                      }}
-                    >
-                      <Text style={styles.searchButtonText}>Search       
-                    </Text>
-                      
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
-            </View>
-            <MapView
-              style={[styles.map, styles.containerBackground]}
-              provider={PROVIDER_GOOGLE}
-              region={mapRegion}
-              showsUserLocation
-              followUserLocation
+    <Drawer.Screen name="Geo Opportunity">
+      {() => (
+        <View style={styles.container}>
+         <View style={styles.header}>
+            <Text style={styles.headerText}></Text>
+            <TouchableOpacity onPress={openModal} style={styles.searchIcon}>
+            <FontAwesome5 style={{marginLeft: 19}} name="search" size={20} color="blue" />
+            </TouchableOpacity>
+            <Modal
+              transparent
+              animationType="slide"
+              visible={modalVisible}
+              onRequestClose={closeModal}
             >
-              {location && (
-                <Marker
-                  coordinate={{
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                  }}
-                  title="You are here"
-                  description="Your current location"
-                />
-              )}
-              {location && (
-                <Circle
-                  center={{
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                  }}
-                  radius={2000}
-                  fillColor="rgba(0, 0, 255, 0.1)"
-                  strokeColor="transparent"
-                />
-              )}
-              {otherMarkers.map((marker) => (
-                <Marker
-                  key={marker.id}
-                  coordinate={marker.coordinate}
-                  title={marker.title}
-                  description={marker.description}
-                  pinColor="#1B4077"
-                  onPress={() => handleMarkerPress(marker)}
-                />
-              ))}
-            </MapView>
-            {renderPopup()}
+              <View style={styles.modalContainer}>
+              <Picker
+                      style={styles.picker}
+                      selectedValue={selectedCity}
+                      onValueChange={(itemValue) => setSelectedCity(itemValue)}
+                    >
+                    
+                  <Picker.Item label="City" value="all" />
+                      <Picker.Item label="Casablanca" value="Casablanca" />
+                      <Picker.Item label="Rabat" value="Rabat" />
+                      <Picker.Item label="Mohammedia" value="Mohammedia" />
+                      <Picker.Item label="Tanger" value="Tanger" />
+                      <Picker.Item label="Marrakech" value="Marrakech" />
+                      <Picker.Item label="Agadir" value="Agadir" />
+                      <Picker.Item label="Sale" value="Sale" />
+                      <Picker.Item label="Kenitra" value="Kenitra" />
+                </Picker>
+                <Picker
+                      style={styles.picker}
+                      selectedValue={selectedOfferType}
+                      onValueChange={(itemValue) => setSelectedOfferType(itemValue)}
+                    >
+                    <Picker.Item label="Domain" value="all" />
+                      <Picker.Item label="Software" value="Software" />
+                      <Picker.Item label="Data Science" value="Data Science" />
+                      <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                      <Picker.Item label="Marketing" value="Marketing" />
+                      <Picker.Item label="HR" value="HR" />
+                      <Picker.Item label="Finance" value="Finance" />
+                </Picker>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={selectedOfferContract}
+                    onValueChange={(itemValue) => setSelectedOfferContract(itemValue)}
+                  >
+                <Picker.Item label="Contract" value="all" />
+                    <Picker.Item label="Intership" value="Intership" />
+                    <Picker.Item label="CDD" value="CDD" />
+                    <Picker.Item label="CDI" value="CDI" />
+                </Picker>
+        
+                <View style={styles.buttonContainer}>
+                
+                  <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
+                    <Text style={styles.buttonText}>Annuler </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.searchButton}
+                    onPress={() => {
+                      search();
+                      closeModal();
+                    }}
+                  >
+                    <Text style={styles.searchButtonText}>Search       
+                  </Text>
+                    
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
           </View>
-        )}
-      </Drawer.Screen>
-      <Drawer.Screen name="LogOut" component={LoginScreen} listeners={{ focus: logout }} />
-      <Drawer.Screen name="Add Feed Back" component={FeedbackScreen}  initialParams={{ candidateId: candidateId }}/>
-    </Drawer.Navigator>
-  );
+          <MapView
+            style={[styles.map, styles.containerBackground]}
+            provider={PROVIDER_GOOGLE}
+            region={mapRegion}
+            showsUserLocation
+            followUserLocation
+            customMapStyle={mapStyle}
+          >
+            {location && (
+              <Marker
+                coordinate={{
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                }}
+                title="You are here"
+                description="Your current location"
+              />
+            )}
+            {location && (
+              <Circle
+                center={{
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                }}
+                radius={2000}
+                fillColor="rgba(0, 0, 255, 0.1)"
+                strokeColor="transparent"
+              />
+            )}
+            {otherMarkers.map((marker) => (
+              <Marker
+                key={marker.id}
+                coordinate={marker.coordinate} 
+                title={marker.title}
+                description={marker.description}
+                pinColor="#1B4077"
+                onPress={() => handleMarkerPress(marker)}
+              />
+            ))}
+          </MapView>
+          {renderPopup()}
+        </View>
+      )}
+    </Drawer.Screen>
+    <Drawer.Screen name="LogOut" component={LoginScreen} listeners={{ focus: logout }} />
+    <Drawer.Screen name="Add Feed Back" component={FeedbackScreen}  initialParams={{ candidateId: candidateId }}/>
+  </Drawer.Navigator>
+        );
 }
+
+const mapStyle = [
+  {
+    featureType: 'poi',
+    elementType: 'labels',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+];
 
 const styles = StyleSheet.create({
   container: {
@@ -385,15 +415,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   picker: {
-    width: '100%',
-    height: 40,
-    marginVertical: 10,
+   height: 40,
+    marginVertical: 5,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#E0E0E0',
     backgroundColor: '#FFFFFF',
     color: '#000000',
-    paddingHorizontal: 10,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -427,6 +455,9 @@ const styles = StyleSheet.create({
     elevation: 5,
     top:200,
     borderRadius:30,
+    marginLeft:40,
+    marginRight:40,
+    paddingTop:30,
 
   },
 

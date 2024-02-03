@@ -7,12 +7,12 @@ const CandidatsOfferRec = () => {
   const [offer, setOffer] = useState(null);
   const route = useRoute();
   const { offerId } = route.params;
-
+  console.log("Received ID offer :", offerId);
 
   useEffect(() => {
     const fetchOffer = async () => {
       try {
-        const response = await fetch(`http://192.168.11.105:8222/offre/${offerId}`);
+        const response = await fetch(`http://192.168.11.103:8222/offre/${offerId}`);
         const data = await response.json();
         setOffer(data);
       } catch (error) {
