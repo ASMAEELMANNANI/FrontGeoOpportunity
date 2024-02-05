@@ -47,7 +47,7 @@ export default function RegisterScreen({ navigation }) {
     console.log('Nom:', nom.value);
   
     try {
-      const response = await fetch('http://192.168.11.103:8222/user/createRecruiter', {
+      const response = await fetch('http://192.168.43.149:8222/user/createRecruiter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,7 +55,7 @@ export default function RegisterScreen({ navigation }) {
         body: `firstname=${encodeURIComponent(firstname.value)}&lastname=${encodeURIComponent(lastname.value)}&username=${encodeURIComponent(username.value)}&password=${encodeURIComponent(password.value)}&phone=${encodeURIComponent(phone.value)}&adresse=${encodeURIComponent(adresse.value)}&nom=${encodeURIComponent(nom.value)}`,
       });
   
-      if (response.status === 200) {
+      if (response.status === 200) { 
         // Candidate creation successful
         // You may want to handle the response from the server, if needed.
         console.log('Recruiter created successfully');

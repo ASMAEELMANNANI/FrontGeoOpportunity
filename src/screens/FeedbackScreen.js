@@ -22,7 +22,7 @@ const FeedbackScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     // Fetch companies from API
-    fetch('http://192.168.11.103:8222/entreprise')
+    fetch('http://172.17.36.105:8222/entreprise')
       .then((response) => response.json())
       .then((data) => {
         // Extract company names from the API response
@@ -45,7 +45,7 @@ const FeedbackScreen = ({ route, navigation }) => {
         return;
       }
 
-      const response = await fetch('http://192.168.11.103:8222/feedback/AddFeed', {
+      const response = await fetch('http://192.168.43.149:8222/feedback/AddFeed', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

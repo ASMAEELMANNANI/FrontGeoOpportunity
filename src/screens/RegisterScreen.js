@@ -99,7 +99,7 @@ export default function RegisterScreen({ navigation }) {
       console.log('Phone:', phone.value);
       console.log('CV File:', CV.value);
 
-      const response = await fetch('http://192.168.11.103:8222/user/createCandidate', {
+      const response = await fetch('http://192.168.43.149:8222/user/createCandidate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

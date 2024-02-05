@@ -80,7 +80,7 @@ export default function RegisterScreen({ route, navigation }) {
     
 
     try {
-      const response = await fetch('http://192.168.11.103:8222/offre/Add', {
+      const response = await fetch('http://192.168.43.149:8222/offre/Add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

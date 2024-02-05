@@ -14,7 +14,7 @@ const DetailsScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchOfferData = async () => {
       try {
-        const response = await fetch(`http://192.168.11.103:8222/offre/${OfferId}`);
+        const response = await fetch(`http://192.168.43.149:8222/offre/${OfferId}`);
         const data = await response.json();
         setOfferData(data);
       } catch (error) {
@@ -27,7 +27,7 @@ const DetailsScreen = ({ navigation }) => {
 
   const applyToJob = async () => {
     try {
-      const response = await fetch(`http://192.168.11.103:8222/offre/${OfferId}/postuler/${CandId}`, {
+      const response = await fetch(`http://192.168.43.149:8222/offre/${OfferId}/postuler/${CandId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

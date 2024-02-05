@@ -102,7 +102,7 @@ export default function Dashboard() {
           setSelectedMarker(null);
         }
   
-        const response = await fetch('http://192.168.11.103:8222/offre');
+        const response = await fetch('http://192.168.43.149:8222/offre');
         const data = await response.json();
   
         // Filter offers based on proximity (within 10 kilometers in this example)
@@ -171,15 +171,15 @@ export default function Dashboard() {
   
       if (selectedCity === 'all' && selectedOfferType === 'all' && selectedOfferContract === 'all') {
         // Use the original endpoint if all values are "all"
-        url = 'http://192.168.11.103:8222/offre';
+        url = 'http://192.168.43.149:8222/offre';
       } else {
         // Use the filtered endpoint with selected values
-        url = `http://192.168.11.103:8222/offre/filter?domaine=${selectedOfferType}&ville=${selectedCity}&contrat=${selectedOfferContract}`;
+        url = `http://192.168.43.149:8222/offre/filter?domaine=${selectedOfferType}&ville=${selectedCity}&contrat=${selectedOfferContract}`;
       }
   
       const response = await fetch(url);
       const data = await response.json();
-
+ 
       const nearbyOffers = data.filter((offre) => {
         if (!location || !location.coords) {
           return false; // Handle null or undefined location
@@ -323,7 +323,7 @@ export default function Dashboard() {
                   latitude: location.coords.latitude,
                   longitude: location.coords.longitude,
                 }}
-                radius={2000}
+                radius={20000}
                 fillColor="rgba(0, 0, 255, 0.1)"
                 strokeColor="transparent"
               />

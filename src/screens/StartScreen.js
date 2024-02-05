@@ -7,6 +7,7 @@ import Paragraph1 from '../components/Paragraph1'
 export default function StartScreen({ navigation }) {
   return (
     <Background>
+      
       <Header>Geo Opportunity</Header>
       <Paragraph1>
         Geo-localized job and internship search and sharing application.
